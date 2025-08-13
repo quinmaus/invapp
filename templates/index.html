@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 32px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 24px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 24px;
+        }
+        .item-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .item-name {
+            font-size: 1.2rem;
+            flex: 2;
+        }
+        .item-count {
+            font-size: 1.2rem;
+            width: 60px;
+            text-align: center;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        .actions form {
+            display: inline;
+        }
+        .btn {
+            font-size: 1.2rem;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:active {
+            background: #0056b3;
+        }
+        @media (max-width: 700px) {
+            .container {
+                max-width: 98vw;
+                padding: 12px;
+            }
+            .item-name, .item-count {
+                font-size: 1rem;
+            }
+            .btn {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Inventory</h1>
+        <ul class="item-list">
+            {% for item in items %}
+            <li class="item">
+                <span class="item-name">{{ item.name }}</span>
+                <span class="item-count">{{ item.count }}</span>
+                <div class="actions">
+                    <form method="post" style="display:inline;">
+                        <input type="hidden" name="idx" value="{{ loop.index0 }}">
+                        <input type="hidden" name="action" value="up">
+                        <button class="btn" type="submit">+</button>
+                    </form>
+                    <form method="post" style="display:inline;">
+                        <input type="hidden" name="idx" value="{{ loop.index0 }}">
+                        <input type="hidden" name="action" value="down">
+                        <button class="btn" type="submit">−</button>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <form action="{{ url_for('export') }}" method="post" style="margin-top: 24px;">
+            <label for="gmail">Export to Google Sheets:</label>
+            <input type="email" id="gmail" name="gmail" required placeholder="Enter your Gmail">
+            <button class="btn" type="submit">Export</button>
+        </form>
+    </div>
+</body>
+</html>
